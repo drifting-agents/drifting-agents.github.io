@@ -1,0 +1,14 @@
+# 에이전트 표류기 — 사이트 메타
+# 한 층짜리 key: value 만 쓴다(build.py의 parse_kv). # 이 들어가는 값은 따옴표로 감싼다.
+
+title: "에이전트 표류기"            # 첫 화면 큰 제목 · 탭 · 머리 · 꼬리
+title_en: "Drifting Agents"         # 첫 화면 제목 위 작은 글씨 · 꼬리
+tagline: "에이전트를 만드는 사람이 적는 데이터, 에이전트, 그리고 자기 삶의 표류기."   # 첫 화면 설명 · 링크 미리보기 기본값
+url: "https://drifting-agents.github.io"
+author: "Injee"                     # RSS 작성자
+
+# 댓글 — giscus.app에서 복사해 채운다. repo_id가 비어 있으면 댓글창을 넣지 않는다.
+giscus_repo: "drifting-agents/drifting-agents.github.io"
+giscus_repo_id: ""
+giscus_category: "Announcements"
+giscus_category_id: ""

@@ -5,7 +5,7 @@
     python3 build.py
     python3 -m http.server -d _site 8000
 
-의존성 없음. 글 파일 이름은 YYYY-MM-DD-slug.md, 주소는 /posts/slug/.
+사이트 제목 · 설명 · 댓글 설정은 site.yaml. 의존성 없음. 글 파일 이름은 YYYY-MM-DD-slug.md, 주소는 /posts/slug/.
 """
 import os, re, shutil, html, datetime
 from md import render, esc
@@ -13,30 +13,10 @@ from md import render, esc
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "_site")
 
-SITE = {
-    "title": "에이전트 표류기",
-    "title_en": "Drifting Agents",
-    "url": "https://drifting-agents.github.io",
-    "tagline": "에이전트를 만드는 사람이 데이터와 에이전트와 자기 삶의 표류를 기록한다.",
-    "author": "Injee",
-}
-
-# giscus.app에서 복사해 채운다. repo_id가 비어 있으면 댓글창을 넣지 않는다.
-GISCUS = {
-    "repo": "drifting-agents/drifting-agents.github.io",
-    "repo_id": "",
-    "category": "Announcements",
-    "category_id": "",
-}
-
-
-def front_matter(text):
-    """--- 로 감싼 key: value 만 읽는다. 값은 문자열 또는 [..] 목록."""
-    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
-    if not m:
-        return {}, text
+def parse_kv(text):
+    """한 층짜리 key: value 만 읽는다. 값은 문자열 또는 [..] 목록. # 뒤는 주석."""
     meta = {}
-    for ln in m.group(1).split("\n"):
+    for ln in text.split("\n"):
         km = re.match(r"^([^\s:#][^:]*):\s*(.*)$", ln)
         if not km:
             continue
@@ -47,9 +27,22 @@ def front_matter(text):
         elif v.startswith("["):
             v = [x.strip().strip("\"'") for x in v.split("]")[0][1:].split(",") if x.strip()]
         else:
-            v = re.sub(r"\s+#.*$", "", v)
+            v = re.sub(r"\s*#.*$", "", v)
         meta[k] = v
-    return meta, text[m.end():]
+    return meta
+
+
+def front_matter(text):
+    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return {}, text
+    return parse_kv(m.group(1)), text[m.end():]
+
+
+with open(os.path.join(ROOT, "site.yaml"), encoding="utf-8") as f:
+    _conf = parse_kv(f.read())
+SITE = {k: v for k, v in _conf.items() if not k.startswith("giscus_")}
+GISCUS = {k[len("giscus_"):]: v for k, v in _conf.items() if k.startswith("giscus_")}
 
 
 def load_posts():
@@ -147,7 +140,7 @@ def index_html(posts):
     empty = "" if posts else "<p class='empty'>아직 표류 중.</p>"
     return """<section class="hero">
 <span class="eyebrow">{en}</span>
-<h1>{title}.</h1>
+<h1>{title}</h1>
 <p>{tagline}</p>
 </section>
 <ol class="posts">{items}</ol>{empty}""".format(en=SITE["title_en"], title=SITE["title"],
@@ -182,7 +175,7 @@ def main():
         path = "/posts/%s/" % p["slug"]
         write("posts/%s/index.html" % p["slug"], page(p["title"], post_html(p), p["summary"], path, "article"))
     write("feed.xml", feed(posts))
-    write("404.html", page("길을 잃었다", "<section class='hero'><span class='eyebrow'>404</span><h1>길을 잃었다.</h1><p>여기도 표류 중이다. <a href='/'>처음으로</a></p></section>"))
+    write("404.html", page("길을 잃었다", "<section class='hero'><span class='eyebrow'>404</span><h1>길을 잃었다</h1><p>여기도 표류 중이다. <a href='/'>처음으로</a></p></section>"))
     write(".nojekyll", "")
     shutil.copytree(os.path.join(ROOT, "theme"), os.path.join(OUT, "assets"))
     print("built %d post(s) → %s" % (len(posts), os.path.relpath(OUT)))
