@@ -21,6 +21,7 @@ def inline(s):
         t = esc(part)
         t = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)", r'<img src="\2" alt="\1" loading="lazy">', t)
         t = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', t)
+        t = re.sub(r"(?<![=\"'>])(https?://[^\s<]+[^\s<.,)」』])", r'<a href="\1">\1</a>', t)   # 맨 URL
         t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
         t = re.sub(r"(?<![\w*])\*(?!\s)([^*]+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
         buf.append(t)
