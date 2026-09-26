@@ -61,9 +61,10 @@ def load_posts():
             "track": meta.get("트랙", ""),
             "summary": meta.get("요약", ""),
             "question": meta.get("남기는-질문", ""),
+            "stamp": meta.get("발행시각", ""),
             "body": render(body),
         })
-    posts.sort(key=lambda p: p["date"], reverse=True)
+    posts.sort(key=lambda p: (p["date"], p["stamp"]), reverse=True)   # 같은 날이면 나중에 올린 글이 위
     return posts
 
 
