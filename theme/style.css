@@ -1,0 +1,134 @@
+/* 여백 · Yeobaek — 한지 바탕, 먹 글씨, 낙관 하나. 토큰의 원본은 private 리포 yeobaek/design.md */
+
+:root {
+  --seal: #b5402e;
+  --steel: #7d7870;
+  --paper: #faf8f3;
+  --ink: #1a1916;
+  --ink-soft: #4a4740;
+  --card: #ffffff;
+  --hair: rgba(26, 25, 22, 0.12);
+  --tint: rgba(26, 25, 22, 0.035);
+  --serif: "Noto Serif KR", serif;
+  --sans: "Noto Sans KR", -apple-system, sans-serif;
+  --mono: "Noto Sans Mono", ui-monospace, monospace;
+  --measure: 40rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --seal: #c95a47;
+    --steel: #9a958c;
+    --paper: #111110;
+    --ink: #f1eee7;
+    --ink-soft: #c9c5bc;
+    --card: #1a1917;
+    --hair: rgba(241, 238, 231, 0.14);
+    --tint: rgba(241, 238, 231, 0.04);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.8 var(--sans);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+main, header.site, footer.site { max-width: var(--measure); margin: 0 auto; padding: 0 16px; }
+a { color: inherit; text-decoration-color: var(--seal); text-underline-offset: 3px; }
+a:hover { color: var(--seal); }
+
+.eyebrow {
+  display: block;
+  font: 600 11px/1.4 var(--sans);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--seal);
+  margin-bottom: 12px;
+}
+
+/* 머리 · 꼬리 */
+header.site { padding-top: 32px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 600 15px/1 var(--serif); }
+.brand img { display: block; }
+footer.site {
+  display: flex; justify-content: space-between; gap: 16px;
+  margin-top: 128px; padding-top: 24px; padding-bottom: 48px;
+  border-top: 1px solid var(--hair);
+  font: 400 13px/1.6 var(--mono); color: var(--steel);
+}
+footer.site a { text-decoration: none; }
+
+/* 첫 화면 */
+.hero { padding: 128px 0 64px; }
+.hero h1 { font: 600 44px/1.2 var(--serif); letter-spacing: -1px; margin: 0 0 20px; }
+.hero p { color: var(--ink-soft); margin: 0; }
+.posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
+.posts li { border-bottom: 1px solid var(--hair); }
+.posts a { display: block; padding: 36px 0; text-decoration: none; transition: color 220ms cubic-bezier(.2,.7,.2,1); }
+.posts h2 { font: 600 24px/1.4 var(--serif); letter-spacing: -0.5px; margin: 0 0 8px; }
+.posts p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; }
+.posts time, .post header time { font: 400 13px/1 var(--mono); color: var(--steel); }
+.posts .eyebrow { margin-bottom: 10px; }
+.empty { color: var(--steel); }
+
+/* 글 */
+.post > header { padding: 96px 0 48px; }
+.post h1 { font: 600 36px/1.3 var(--serif); letter-spacing: -1px; margin: 0 0 20px; }
+.prose > * { margin-top: 0; margin-bottom: 0; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { font: 600 24px/1.4 var(--serif); letter-spacing: -0.5px; margin: 72px 0 0; }
+.prose h3 { font: 600 19px/1.5 var(--serif); margin: 48px 0 0; }
+.prose h4 { font: 600 17px/1.5 var(--sans); margin: 32px 0 0; }
+.prose strong { font-weight: 600; }
+.prose em { font-style: normal; color: var(--ink-soft); font-family: var(--serif); }
+.prose blockquote {
+  margin: 1.6em 0; padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--seal);
+  font-family: var(--serif);
+}
+.prose blockquote p { margin: 0; }
+.prose blockquote em { color: var(--ink); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li + li { margin-top: 0.35em; }
+.prose hr { border: 0; height: 1px; background: var(--hair); margin: 64px auto; width: 64px; }
+.prose img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--hair); }
+.prose code { font: 400 0.84em var(--mono); background: var(--tint); padding: 1px 5px; border-radius: 2px; }
+.prose pre {
+  background: var(--card); border: 1px solid var(--hair); border-radius: 10px;
+  padding: 18px 20px; overflow-x: auto; font: 400 13px/1.7 var(--mono);
+}
+.prose pre code { background: none; padding: 0; font-size: inherit; }
+.tw { overflow-x: auto; margin: 1.6em 0; }
+.prose table { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.6; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--hair); }
+.prose th { font-weight: 600; font-size: 13px; color: var(--steel); }
+
+/* 모르는 것을 적는 자리 */
+.unverified {
+  background: var(--card); border: 1px dashed var(--steel); border-radius: 10px;
+  padding: 16px 20px; font-size: 15px; color: var(--ink-soft);
+}
+.unverified .eyebrow { color: var(--steel); margin-bottom: 6px; }
+
+/* 글 끝 */
+.question { margin: 72px 0 0; padding: 28px 0 0; border-top: 1px solid var(--hair); }
+.question p { font: 600 21px/1.6 var(--serif); margin: 0; }
+.end { text-align: center; margin: 72px 0 0; }
+.end img { opacity: 0.9; }
+.comments { margin-top: 96px; }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .hero { padding: 80px 0 48px; }
+  .hero h1 { font-size: 34px; }
+  .post > header { padding: 64px 0 36px; }
+  .post h1 { font-size: 28px; }
+  .posts h2 { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
