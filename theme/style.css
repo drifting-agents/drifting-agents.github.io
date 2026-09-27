@@ -120,7 +120,14 @@ footer.site a { text-decoration: none; }
 .question { margin: 72px 0 0; padding: 28px 0 0; border-top: 1px solid var(--hair); }
 .question p { font: 600 21px/1.6 var(--serif); margin: 0; }
 .end { text-align: center; margin: 72px 0 0; }
-.end img { opacity: 0.9; }
+.end a { display: inline-block; transition: transform 220ms cubic-bezier(.2,.7,.2,1), opacity 220ms; opacity: 0.9; }
+.end a:hover { opacity: 1; transform: translateY(-2px); }
+/* 글 끝 길잡이 */
+.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 72px 0 0; border-top: 1px solid var(--hair); padding-top: 32px; }
+.pager a { display: block; text-decoration: none; font: 600 17px/1.5 var(--serif); transition: color 220ms cubic-bezier(.2,.7,.2,1); }
+.pager .eyebrow { color: var(--steel); margin-bottom: 8px; }
+.pager .next { text-align: right; grid-column: 2; }
+.pager .prev { grid-column: 1; }
 .comments { margin-top: 96px; }
 
 @media (max-width: 560px) {
@@ -130,5 +137,8 @@ footer.site a { text-decoration: none; }
   .post > header { padding: 64px 0 36px; }
   .post h1 { font-size: 28px; }
   .posts h2 { font-size: 21px; }
+  .pager { grid-template-columns: 1fr; }
+  .pager .next, .pager .prev { grid-column: 1; text-align: left; }
+  .pager span:empty { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

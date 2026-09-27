@@ -116,7 +116,16 @@ def giscus():
  crossorigin="anonymous" async></script></section>""".format(**GISCUS)
 
 
-def post_html(p):
+def pager(newer, older):
+    """글 끝 길잡이. posts는 최신순이므로 이전 글 = older, 다음 글 = newer."""
+    def cell(p, cls, label):
+        if not p:
+            return "<span class='%s'></span>" % cls
+        return "<a class='%s' href='/posts/%s/'><span class='eyebrow'>%s</span>%s</a>" % (cls, p["slug"], label, esc(p["title"]))
+    return """<nav class="pager" aria-label="글 이동">{prev}{next}</nav>""".format(prev=cell(older, "prev", "이전 글"), next=cell(newer, "next", "다음 글"))
+
+
+def post_html(p, newer=None, older=None):
     q = ""
     if p["question"]:
         q = "<aside class='question'><span class='eyebrow'>남은 질문</span><p>%s</p></aside>" % esc(p["question"])
@@ -125,10 +134,11 @@ def post_html(p):
 <header>{track}<h1>{title}</h1><time datetime="{date}">{ddate}</time></header>
 <div class="prose">{body}</div>
 {q}
-<div class="end"><img src="/assets/seal.svg" alt="끝" width="36" height="36"></div>
+<div class="end"><a href="/" title="처음으로" aria-label="끝 — 처음으로"><img src="/assets/seal.svg" alt="" width="36" height="36"></a></div>
 </article>
+{nav}
 {comments}""".format(track=track, title=esc(p["title"]), date=p["date"], ddate=dot(p["date"]),
-                     body=p["body"], q=q, comments=giscus())
+                     body=p["body"], q=q, nav=pager(newer, older), comments=giscus())
 
 
 def index_html(posts):
@@ -172,9 +182,11 @@ def main():
         shutil.rmtree(OUT)
     posts = load_posts()
     write("index.html", page(SITE["title"], index_html(posts)))
-    for p in posts:
+    for i, p in enumerate(posts):   # 최신순
+        newer = posts[i - 1] if i > 0 else None
+        older = posts[i + 1] if i + 1 < len(posts) else None
         path = "/posts/%s/" % p["slug"]
-        write("posts/%s/index.html" % p["slug"], page(p["title"], post_html(p), p["summary"], path, "article"))
+        write("posts/%s/index.html" % p["slug"], page(p["title"], post_html(p, newer, older), p["summary"], path, "article"))
     write("feed.xml", feed(posts))
     write("404.html", page("길을 잃었다", "<section class='hero'><span class='eyebrow'>404</span><h1>길을 잃었다</h1><p>여기도 표류 중이다. <a href='/'>처음으로</a></p></section>"))
     write(".nojekyll", "")
